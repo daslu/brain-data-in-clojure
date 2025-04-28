@@ -7,8 +7,6 @@
 
 (set! *warn-on-reflection* true)
 
-(def eeg-data-atom (atom nil))
-
 (declare struct->map cell->vec matrix->vec)
 
 (defn complex
@@ -121,9 +119,8 @@
     (println "Data saved to brains!.edn")))
 
 (defn load-eeg-data!
-  "Load EEG data from a MATLAB file into the eeg-data-atom with preprocessing"
+  "Load EEG data from a MATLAB file with preprocessing"
   [file-path]
-  (reset! eeg-data-atom nil)
   (let [mat-file (time (Mat5/readFromFile (clojure.java.io/file file-path)))
         eeg-struct (.getStruct mat-file "eeg")
         sample-number (if-let [matches (re-find #"s(\d+)\.mat" file-path)]
@@ -140,8 +137,8 @@
                         :senloc         (update (:senloc         data) :values vec)
                         :psenloc        (update (:psenloc        data) :values vec)}]
     
-    (reset! eeg-data-atom processed-data)
-    {:data-keys (keys processed-data)
+    {:processed-data processed-data
+     :data-keys (keys processed-data)
      :num-dimensions (time (into {} (map (fn [[k v]] [k (:dims v)])
                                          (select-keys processed-data [:movement_left  :movement_right
                                                                       :imagery_left   :imagery_right
