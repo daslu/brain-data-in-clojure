@@ -298,3 +298,8 @@
     (comprehensive-eeg-analysis data [99 107] [12 49])))
 
 
+
+;; problems with memoize:
+;; - doesn't foget (use a cache library if we need some forget rule)
+;; - inefficient in concurrent situations
+;; - if we revevaluate the definition, it forgets everything (may want to use defonce)
