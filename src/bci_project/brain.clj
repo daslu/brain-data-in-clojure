@@ -7,7 +7,6 @@
 
 (set! *warn-on-reflection* true)
 
-
 (def eeg-data-atom (atom nil))
 
 (declare struct->map cell->vec matrix->vec)
@@ -74,21 +73,21 @@
                         :elements total-elements}
               values (case (count dims)
                        1
-                       ;; (vec (for [^int i (range (first dims))]
-                       ;;        (.getDouble matrix i)))
-                       (tensor/compute-tensor dims
-                                              (fn [^long i]
-                                                (.getDouble matrix i))
-                                              :float32)
+                       (vec (for [^int i (range (first dims))]
+                              (.getDouble matrix i)))
+                       ;; (tensor/compute-tensor dims
+                       ;;                        (fn [^long i]
+                       ;;                          (.getDouble matrix i))
+                       ;;                        :float32)
                        2
-                       ;; (vec (for [^int i (range (first dims))]
-                       ;;        (vec (for [^int j (range (second dims))]
-                       ;;               (.getDouble matrix i j)))))
-                       (tensor/compute-tensor dims
-                                              (fn [^long i
-                                                   ^long j]
-                                                (.getDouble matrix i j))
-                                              :float32)
+                       (vec (for [^int i (range (first dims))]
+                              (vec (for [^int j (range (second dims))]
+                                     (.getDouble matrix i j)))))
+                       ;; (tensor/compute-tensor dims
+                       ;;                        (fn [^long i
+                       ;;                             ^long j]
+                       ;;                          (.getDouble matrix i j))
+                       ;;                        :float32)
                        (throw (Exception. (str "Unsupported dimension count: " (count dims)))))]
           (assoc metadata :values values))))))
 
@@ -132,14 +131,15 @@
                         "unknown")
         data (time (struct->map eeg-struct))
         processed-data {:sample_number  sample-number
-                        :movement_left   (:movement_left  data) 
-                        :movement_right  (:movement_right data) 
-                        :imagery_left    (:imagery_left   data) 
-                        :imagery_right   (:imagery_right  data) 
-                        :movement_event  (:movement_event data) 
-                        :imagery_event   (:imagery_event  data) 
-                        :senloc          (:senloc         data) 
-                        :psenloc         (:psenloc        data) }]
+                        :movement_left  (update (:movement_left  data) :values vec)
+                        :movement_right (update (:movement_right data) :values vec)
+                        :imagery_left   (update (:imagery_left   data) :values vec)
+                        :imagery_right  (update (:imagery_right  data) :values vec)
+                        :movement_event (update (:movement_event data) :values vec)
+                        :imagery_event  (update (:imagery_event  data) :values vec)
+                        :senloc         (update (:senloc         data) :values vec)
+                        :psenloc        (update (:psenloc        data) :values vec)}]
+    
     (reset! eeg-data-atom processed-data)
     {:data-keys (keys processed-data)
      :num-dimensions (time (into {} (map (fn [[k v]] [k (:dims v)])
