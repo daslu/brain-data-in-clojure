@@ -282,12 +282,12 @@
                                       :justify-content "center"}}
         (movement-and-imagery-visualized data channel-indices time-window frequency-band)]]))))
 
-^:kindly/hide-code
-(defn -main []
-  (brain/memoized-eeg-data "resources/data/s01.mat")
-  #_(comprehensive-eeg-analysis brain/eeg-data-atom))
+;; ^:kindly/hide-code
+;; (defn -main []
+;;   (brain/memoized-eeg-data "resources/data/s01.mat")
+;;   #_(comprehensive-eeg-analysis brain/eeg-data-atom))
 
-;uncomment this and run the code with quarto after using 'loag-eeg-data'
+                                        ;uncomment this and run the code with quarto after using 'loag-eeg-data'
 ^:kindly/hide-code
 #_(comprehensive-eeg-analysis brain/eeg-data-atom [99 107] [12 49])
 
@@ -296,8 +296,6 @@
   (let [data (:processed-data
               (brain/memoized-eeg-data "resources/data/s01.mat"))]
     (comprehensive-eeg-analysis data [99 107] [12 49])))
-
-
 
 ;; problems with memoize:
 ;; - doesn't foget (use a cache library if we need some forget rule)
