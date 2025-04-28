@@ -144,3 +144,6 @@
                                                                       :imagery_left   :imagery_right
                                                                       :movement_event :imagery_event
                                                                       :senloc         :psenloc]))))}))
+
+(def memoized-eeg-data
+  (memoize load-eeg-data))

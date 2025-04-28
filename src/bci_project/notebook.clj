@@ -284,7 +284,7 @@
 
 ^:kindly/hide-code
 (defn -main []
-  (brain/load-eeg-data "resources/data/s01.mat")
+  (brain/memoized-eeg-data "resources/data/s01.mat")
   #_(comprehensive-eeg-analysis brain/eeg-data-atom))
 
 ;uncomment this and run the code with quarto after using 'loag-eeg-data'
@@ -294,7 +294,7 @@
 ^:kindly/hide-code
 (delay
   (let [data (:processed-data
-              (brain/load-eeg-data "resources/data/s01.mat"))]
-    (comprehensive-eeg-analysis data [99 107] [13 49])))
+              (brain/memoized-eeg-data "resources/data/s01.mat"))]
+    (comprehensive-eeg-analysis data [99 107] [12 49])))
 
 
