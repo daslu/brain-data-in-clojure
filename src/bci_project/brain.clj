@@ -118,7 +118,7 @@
         (clojure.pprint/pprint eeg-data)))
     (println "Data saved to brains!.edn")))
 
-(defn load-eeg-data!
+(defn load-eeg-data
   "Load EEG data from a MATLAB file with preprocessing"
   [file-path]
   (let [mat-file (time (Mat5/readFromFile (clojure.java.io/file file-path)))
